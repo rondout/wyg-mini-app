@@ -1,98 +1,102 @@
-## 项目简介
+## uniapp 学习记录
 
-小兔鲜儿项目包含从首页浏览商品，商品详情，微信登录，加入购物车，提交订单，微信支付，订单管理等功能。
+### 配置小程序的 appid
 
-当前仓库为小兔鲜儿的**项目模板**。
+如果是开发小程序，则需要配置小程序的 appid，这个 appid 在[微信小程序平台](https://mp.weixin.qq.com/wxamp/devprofile/get_profile?token=366032452&lang=zh_CN)里面点击->开发->开发设置->开发者 ID，即可查到 AppID。然后将 appid 配置到 `manifest.json` 中的 `mp-weixin.appid中`：
 
-### 技术栈
-
-- 前端框架：[uni-app](https://uniapp.dcloud.net.cn/) (Vue3 + TS + Setup)
-- 状态管理：[pinia](https://pinia.vuejs.org/zh/)
-- 组件库：[uni-ui](https://uniapp.dcloud.net.cn/component/uniui/uni-ui.html)
-
-## 资料说明
-
-### 📀 视频学习
-
-[https://www.bilibili.com/video/BV1Bp4y1379L/](https://www.bilibili.com/video/BV1Bp4y1379L/?share_source=copy_web&vd_source=2ac50d29193927b3c8597537dc4bc81d)
-
-### 📗 接口文档
-
-[https://www.apifox.cn/apidoc/shared-0e6ee326-d646-41bd-9214-29dbf47648fa/](https://www.apifox.cn/apidoc/shared-0e6ee326-d646-41bd-9214-29dbf47648fa/)
-
-### ✏️ 在线笔记
-
-[https://megasu.gitee.io/uni-app-shop-note/](https://megasu.gitee.io/uni-app-shop-note/)
-
-### 📦 项目源码
-
-[https://gitee.com/Megasu/uniapp-shop-vue3-ts/](https://gitee.com/Megasu/uniapp-shop-vue3-ts/)
-
-## 运行程序
-
-1. 安装依赖
-
-```shell
-# npm
-npm i --registry=https://registry.npmmirror.com
-
-# pnpm
-pnpm i --registry=https://registry.npmmirror.com
+```json
+{
+  ///
+  "mp-weixin": {
+    "appid": "wx398054d8379566de",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true
+  }
+  ///
+}
 ```
 
-2. 运行程序
+### 安装 ts 包
 
-```shell
-# 微信小程序端
-npm run dev:mp-weixin
+安装 ts 类型包并且配置到 `tsconfig.json`
 
-# H5端
-npm run dev:h5
-
-# App端
-需 HbuilderX 工具，运行 - 运行到手机或模拟器
+```json
+{
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "lib": ["esnext", "dom"],
+    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types"]
+  },
+  "vueCompilerOptions": {
+    // experimentalRuntimeMode 已废弃，现调整为 nativeTags，请升级 Volar 插件至最新版本
+    "nativeTags": ["block", "component", "template", "slot"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+}
 ```
 
-3. 微信开发者工具导入 `/dist/dev/mp-weixin` 目录
+### 安装 uni-ui
 
-### 工程结构解析
+#### 安装
 
+按照 [官方文档](https://uniapp.dcloud.net.cn/component/uniui/quickstart.html#npm%E5%AE%89%E8%A3%85) 的介绍直接安装即可
+
+```bash
+npm i @dcloudio/uni-ui
 ```
-├── .husky                     # Git Hooks
-├── .vscode                    # VS Code 插件 + 设置
-├── dist                       # 打包文件夹（可删除重新打包）
-├── src                        # 源代码
-│   ├── components             # 全局组件
-│   ├── composables            # 组合式函数
-│   ├── pages                  # 主包页面
-│       ├── index               # 首页
-│       ├── category            # 分类页
-│       ├── cart                # 购物车
-│       ├── my                  # 我的
-│       └── login               # 登录页
-│   ├── services               # 所有请求
-│   ├── static                 # 存放应用引用的本地静态资源的目录
-│       ├── images              # 普通图片
-│       └── tabs                # tabBar 图片
-│   ├── stores                 # 全局 pinia store
-│       ├── modules             # 模块
-│       └── index.ts            # store 入口
-│   ├── styles                 # 全局样式
-│       └── fonts.scss          # 字体图标
-│   ├── types                  # 类型声明文件
-│       └── component.d.ts      # 全局组件类型声明
-│   ├── utils                  # 全局方法
-│   ├── App.vue                # 入口页面
-│   ├── main.ts                # Vue初始化入口文件
-│   ├── pages.json             # 配置页面路由等页面类信息
-│   ├── manifest.json          # 配置appid等打包信息
-│   └── uni.scss               # uni-app 内置的常用样式变量
-├── .editorconfig              # editorconfig 配置
-├── .eslintrc.cjs              # eslint 配置
-├── .prettierrc.json           # prettier 配置
-├── .gitignore                 # git 忽略文件
-├── index.html                 # H5 端首页
-├── package.json               # package.json 依赖
-├── tsconfig.json              # typescript 配置
-└── vite.config.ts             # vite 配置
+
+#### 自动导入
+
+在 `pages.json` 里面配置组建的自动导入
+
+```json
+{
+  ///
+  // 组件的自动导入规则
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      // uni-ui 规则如下配置 $1是替换符号
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  }
+  ///
+}
 ```
+
+#### uni-ui 的 TS 类型声明
+
+由于 `uni-ui` 的官方组件爱你是用 `js` 写的，因此是没有 TS 类型的，但是好在 uni 的生态足够强大，我们可以使用 [`@uni-helper/uni-ui-types`](https://www.npmjs.com/package/@uni-helper/uni-ui-types) 这个类型包为 `uni-ui` 添加类型声明。
+
+##### 安装 @uni-helper/uni-ui-types
+
+```bash
+pnpm i -D @uni-helper/uni-ui-types
+```
+
+##### 使用和配置
+
+在 `tsconfig.json` 中将这个类型包加入到 `typs` 属性里面：
+
+```json
+{
+  ///
+  "types": [
+    "@dcloudio/types",
+    "miniprogram-api-typings",
+    "@uni-helper/uni-app-types",
+    "@uni-helper/uni-ui-types"
+  ]
+  ///
+}
+```
+
+然后我们在页面中使用 `uni-ui` 的时候就会有对应的编辑器语法以及注释提示。
