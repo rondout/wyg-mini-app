@@ -1,18 +1,34 @@
-<script setup lang="ts">
-//
+<script lang="ts" setup>
+import CustomNavBar from './components//CustomNavBar.vue'
+import CommonSwiper from '@/components/CommonSwiper.vue'
+import { useServerData } from '@/hooks/useServerData'
+import { homeService } from '@/services'
+
+const [banners] = useServerData(homeService.getBanners)
 </script>
 
 <template>
-  <uni-card
-    title="基础卡片"
-    sub-title="副标题"
-    extra="额外信息"
-    thumbnail="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-  >
-    <text>这是一个带头像和双标题的基础卡片，此示例展示了一个完整的卡片。</text>
-  </uni-card>
+  <view class="viewport">
+    <CustomNavBar />
+    <CommonSwiper :list="banners?.result" />
+  </view>
 </template>
 
 <style lang="scss">
-//
+page {
+  background-color: #f7f7f7;
+  height: 100%;
+  overflow: hidden;
+}
+
+.viewport {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-view {
+  flex: 1;
+  overflow: hidden;
+}
 </style>

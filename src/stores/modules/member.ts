@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export interface Profile {
-  account: string
-  avatar: string
-  id: string
-  mobile: string
-  nickname: string
-  token: string
+  account?: string
+  avatar?: string
+  id?: string
+  mobile?: string
+  nickname?: string
+  token?: string
 }
 
 // 定义 Store

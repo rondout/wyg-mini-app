@@ -3,6 +3,8 @@
   "compilerOptions": {
     "allowJs": true,
     "sourceMap": true,
+    "verbatimModuleSyntax": false,
+    "strictNullChecks": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

@@ -135,4 +135,143 @@ pnpm i -D @uni-helper/uni-ui-types
 
 ## 请求拦截器配置
 
-按照 `uniapp` 官方文档中对于[拦截器](https://uniapp.dcloud.net.cn/api/interceptor.html#addinterceptor)的介绍，我们可以使用 `uni.addInterceptor(STRING, OBJECT)` 这个 api 来设置请求拦截器（也可以使用 `uni.removeInterceptor(STRING)` 这个 API 来删除拦截器），
+按照 `uniapp` 官方文档中对于[拦截器](https://uniapp.dcloud.net.cn/api/interceptor.html#addinterceptor)的介绍，我们可以使用 `uni.addInterceptor(STRING, OBJECT)` 这个 api 来设置请求拦截器（也可以使用 `uni.removeInterceptor(STRING)` 这个 API 来删除拦截器），下面是我封装的 http 模块类：
+
+```ts
+import { useMemberStore } from '@/stores'
+
+// 小兔鲜后台服务地址
+export const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+// 超时时间 10秒
+export const timeout = 10000
+
+const interceptor: UniApp.InterceptorOptions = {
+  invoke(options: UniApp.RequestOptions) {
+    // 1. 非 http 开头需拼接地址
+    if (!options.url.startsWith('http')) {
+      options.url = baseURL + options.url
+    }
+    // 设置超时时间
+    options.timeout = timeout
+    // 设置请求头
+    options.header = {
+      ...options.header,
+      // 后端接口需要知道的请求头
+      'source-client': 'miniapp',
+    }
+    // 4. 添加 token 请求头标识
+    const memberStore = useMemberStore()
+    const token = memberStore.profile?.token
+    if (token) {
+      options.header.Authorization = token
+    }
+  },
+}
+
+uni.addInterceptor('request', interceptor)
+uni.addInterceptor('upload', interceptor)
+
+export interface BaseResponse<T = any> {
+  code: string
+  msg: string
+  result: T
+}
+
+export type UniRequestParams = string | AnyObject | ArrayBuffer | undefined
+
+export class httpService {
+  constructor() {}
+  /**
+   *
+   * @param method 请求的类型
+   * @param url 请求的URL
+   * @param data 请求体
+   * @returns {Promise<BaseResponse<T>>} 返回结果
+   */
+  private sendRequest<T = any, P extends UniRequestParams = UniRequestParams>(
+    method: UniApp.RequestOptions['method'],
+    url: string,
+    data?: P,
+  ): Promise<BaseResponse<T>> {
+    return new Promise<BaseResponse<T>>((resolve, reject) => {
+      uni.request({
+        method,
+        url,
+        data,
+        success(res) {
+          // 状态码 2xx， axios 就是这样设计的
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            // 2.1 提取核心数据 res.data
+            resolve(res.data as BaseResponse<T>)
+          } else if (res.statusCode === 401) {
+            // 401错误  -> 清理用户信息，跳转到登录页
+            const memberStore = useMemberStore()
+            memberStore.clearProfile()
+            uni.navigateTo({ url: '/pages/login/login' })
+            reject(res)
+          } else {
+            // 其他错误 -> 根据后端错误信息轻提示
+            uni.showToast({
+              icon: 'none',
+              title: (res.data as BaseResponse<P>).msg || '请求错误',
+            })
+            reject(res)
+          }
+        },
+        fail(err) {
+          uni.showToast({
+            icon: 'none',
+            title: '网络错误，换个网络试试',
+          })
+          reject(err)
+        },
+      })
+    })
+  }
+
+  protected get<T = any, P extends UniRequestParams = UniRequestParams>(url: string, data?: P) {
+    return this.sendRequest<T>('GET', url, data)
+  }
+}
+```
+
+## 颜色配置
+
+uniapp 提供了 `uni.scss` 这个特殊的文件，里面定义了很多 scss 变量，很多插件比如 uni-ui 就有使用这个 scss 文件，因此比如我们需要改变 `uni-ui` 的主题色，直接在这里面重新声明相关的 `scss` 变量即可：
+
+```scss
+$uni-primary: #27ba9b;
+```
+
+**注意：改变后需要重启才能生效。**
+
+## 安全区域
+
+因为移动端设备的屏幕千差万别，我们可以使用如下 API 获取屏幕的安全区域：
+
+```ts
+const { safeArea } = uni.getSystemInfo()
+```
+
+safeArea 返回值说明：
+
+| 参数   | 类型   | 说明                         |
+| ------ | ------ | ---------------------------- |
+| left   | Number | 安全区域左上角横坐标         |
+| right  | Number | 安全区域右下角横坐标         |
+| top    | Number | 安全区域左上角纵坐标         |
+| bottom | Number | 安全区域右下角纵坐标         |
+| width  | Number | 安全区域的宽度，单位逻辑像素 |
+| height | Number | 安全区域的高度，单位逻辑像素 |
+
+**注：`uni.getSystemInfo`这个 API 返回值有很多，更多信息看[官网](https://uniapp.dcloud.net.cn/api/system/info.html#safearea)。**
+
+## 原项目仓库
+
+### 代码库
+
+[请访问小兔鲜项目原代码仓库](https://gitee.com/Megasu/uniapp-shop-vue3-ts.git)
+
+### 后端 API 接口
+
+[接口地址](https://apifox.com/apidoc/shared-0e6ee326-d646-41bd-9214-29dbf47648fa/api-43426882)

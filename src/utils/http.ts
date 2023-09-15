@@ -1,7 +1,9 @@
+import { useMemberStore } from '@/stores'
+
 // 小兔鲜后台服务地址
-const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+export const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
 // 超时时间 10秒
-const timeout = 10000
+export const timeout = 10000
 
 const interceptor: UniApp.InterceptorOptions = {
   invoke(options: UniApp.RequestOptions) {
@@ -17,7 +19,12 @@ const interceptor: UniApp.InterceptorOptions = {
       // 后端接口需要知道的请求头
       'source-client': 'miniapp',
     }
-    // 下面还可以添加token
+    // 4. 添加 token 请求头标识
+    const memberStore = useMemberStore()
+    const token = memberStore.profile?.token
+    if (token) {
+      options.header.Authorization = token
+    }
   },
 }
 
@@ -30,22 +37,22 @@ export interface BaseResponse<T = any> {
   result: T
 }
 
-type UniRequestParams = string | AnyObject | ArrayBuffer | undefined
+export type UniRequestParams = string | AnyObject | ArrayBuffer | undefined
 
-export class httpController {
+export class httpService {
   constructor() {}
   /**
    *
    * @param method 请求的类型
    * @param url 请求的URL
    * @param data 请求体
-   * @returns {{R}} 返回结果
+   * @returns {Promise<BaseResponse<T>>} 返回结果
    */
   private sendRequest<T = any, P extends UniRequestParams = UniRequestParams>(
     method: UniApp.RequestOptions['method'],
     url: string,
     data?: P,
-  ) {
+  ): Promise<BaseResponse<T>> {
     return new Promise<BaseResponse<T>>((resolve, reject) => {
       uni.request({
         method,
@@ -58,15 +65,15 @@ export class httpController {
             resolve(res.data as BaseResponse<T>)
           } else if (res.statusCode === 401) {
             // 401错误  -> 清理用户信息，跳转到登录页
-            // const memberStore = useMemberStore()
-            // memberStore.clearProfile()
+            const memberStore = useMemberStore()
+            memberStore.clearProfile()
             uni.navigateTo({ url: '/pages/login/login' })
             reject(res)
           } else {
             // 其他错误 -> 根据后端错误信息轻提示
             uni.showToast({
               icon: 'none',
-              title: (res.data as BaseResponse<R>).msg || '请求错误',
+              title: (res.data as BaseResponse<P>).msg || '请求错误',
             })
             reject(res)
           }
@@ -82,7 +89,7 @@ export class httpController {
     })
   }
 
-  public get<T = any, P extends UniRequestParams = UniRequestParams>(url: string, data: P) {
+  protected get<T = any, P extends UniRequestParams = UniRequestParams>(url: string, data?: P) {
     return this.sendRequest<T>('GET', url, data)
   }
 }
