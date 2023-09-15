@@ -266,6 +266,22 @@ safeArea 返回值说明：
 
 **注：`uni.getSystemInfo`这个 API 返回值有很多，更多信息看[官网](https://uniapp.dcloud.net.cn/api/system/info.html#safearea)。**
 
+## uni 组件记录
+
+### scroll-view
+
+scroll-view 和 view 的区别是 view 默认是不支持 overflow 的，scroll-view 的具体属性配置请参考[官方文档](https://uniapp.dcloud.net.cn/component/scroll-view.html)，下面只是记录一些我用到的值得记录的一些属性：
+
+| 属性名              | 类型        | 说明                                                                          | 默认值 |
+| ------------------- | ----------- | ----------------------------------------------------------------------------- | ------ |
+| scroll-y            | boolean     | 是否允许纵向滚动                                                              | false  |
+| scroll-x            | boolean     | 是否允许横向滚动                                                              | false  |
+| enable-back-to-top  | boolean     | iOS 点击顶部状态栏、安卓双击标题栏时，滚动条返回顶部，只支持竖向              | false  |
+| refresher-enabled   | boolean     | 开启自定义下拉刷新                                                            | false  |
+| refresher-triggered | boolean     | 设置当前下拉刷新状态，true 表示下拉刷新已经被触发，false 表示下拉刷新未被触发 | false  |
+| @scrolltolower      | EventHandle | 滚动到底部/右边，会触发 scrolltolower 事件                                    |        |
+| @refresherrefresh   | EventHandle | 自定义下拉刷新被触发                                                          |        |
+
 ## 原项目仓库
 
 ### 代码库

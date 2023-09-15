@@ -1,22 +1,29 @@
 import { ref, Ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { BaseResponse } from '@/models/response'
 
 // 公用的
-export const useServerData = <T>(
+export const useServerData = <T extends BaseResponse>(
   fetchFn: (...rest: any) => Promise<T>,
-  onSuccess?: (data: Ref<T>) => void,
-  onError?: (error: any) => void,
+  defaultValue?: T['result'],
+  args: {
+    onSuccess?: (data: Ref<T>) => void
+    onError?: (error: any) => void
+  } = {},
 ) => {
-  const data = ref<T>(null)
+  const { onSuccess, onError } = args
+
+  type DataType = T['result']
+  const data: Ref<DataType> = ref(defaultValue)
   const loading = ref<boolean>(true)
 
   const triggerFetchFn = async () => {
     loading.value = true
     try {
       const res = await fetchFn()
-      // @ts-ignore
-      data.value = res
-      onSuccess && onSuccess(data as Ref<T>)
+      // @ts-ignor
+      data.value = res?.result
+      onSuccess && onSuccess(data.value)
       loading.value = false
     } catch (error) {
       loading.value = false
@@ -26,8 +33,8 @@ export const useServerData = <T>(
 
   onLoad(() => triggerFetchFn())
 
-  type Result = [Ref<T>, Ref<boolean>, () => Promise<void>]
-  const result: Result = [data as Ref<T>, loading, triggerFetchFn]
+  type Result = [Ref<DataType>, Ref<boolean>, () => Promise<void>]
+  const result: Result = [data, loading, triggerFetchFn]
 
   return result
 }

@@ -1,3 +1,4 @@
+import { BaseResponse } from '@/models/response'
 import { useMemberStore } from '@/stores'
 
 // 小兔鲜后台服务地址
@@ -30,12 +31,6 @@ const interceptor: UniApp.InterceptorOptions = {
 
 uni.addInterceptor('request', interceptor)
 uni.addInterceptor('upload', interceptor)
-
-export interface BaseResponse<T = any> {
-  code: string
-  msg: string
-  result: T
-}
 
 export type UniRequestParams = string | AnyObject | ArrayBuffer | undefined
 
