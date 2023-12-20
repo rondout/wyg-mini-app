@@ -4,6 +4,8 @@ import { homeService } from '@/services'
 import { ref } from 'vue'
 
 const memberStore = useMemberStore()
+const getPhoneBtnRef = ref()
+const confirmedPolicy = ref(true)
 
 const userInfo = ref<any[]>([])
 const wxUserInfo = ref({})
@@ -26,36 +28,49 @@ const callWxLogin = () => {
   //     console.log("info_result",info)
   //   }
   // })
-  uni.getUserProfile({
-    provider: 'weixin',
-    desc: '获取用户信息',
-    success(info) {
-      console.log('用户信息', info)
-      wxUserInfo.value = info.userInfo
-      uni.login({
-        provider: 'weixin',
-        success(loginResult) {
-          console.log({ loginResult })
-          uni.showToast({
-            title: '成功',
-          })
-        },
-        fail() {
-          uni.showToast({
-            title: '失败',
-            icon: 'error',
-          })
-        },
-      })
-    },
-    fail(err) {
-      console.log('获取用户信息失败', err)
-    },
-  })
+  // uni.getUserProfile({
+  //   provider: 'weixin',
+  //   desc: '获取用户信息',
+  //   success(info) {
+  //     console.log('用户信息', info)
+  //     wxUserInfo.value = info.userInfo
+  //     uni.login({
+  //       provider: 'weixin',
+  //       success(loginResult) {
+  //         console.log({ loginResult })
+  //         uni.showToast({
+  //           title: '成功',
+  //         })
+  //       },
+  //       fail() {
+  //         uni.showToast({
+  //           title: '失败',
+  //           icon: 'error',
+  //         })
+  //       },
+  //     })
+  //   },
+  //   fail(err) {
+  //     console.log('获取用户信息失败', err)
+  //   },
+  // })
 }
 
 const handlePhoneNumberResp = (e) => {
   console.log('获取手机号', e)
+}
+
+const showUserPolicy = () => {
+  console.log()
+}
+
+const handleLogin = () => {
+  uni.login({
+    provider: 'weixin',
+    success(res) {
+      console.log('LOGIN_RESULT', res)
+    },
+  })
 }
 </script>
 
@@ -69,16 +84,23 @@ const handlePhoneNumberResp = (e) => {
       />
     </view>
     <view class="login-container">
-      <button open-type="getPhoneNumber" @getphonenumber="handlePhoneNumberResp">
+      <!-- <button @click="handleLogin">Login</button> -->
+      <button v-if="confirmedPolicy">微信登录/注册</button>
+      <button
+        open-type="getPhoneNumber"
+        ref="getPhoneBtnRef"
+        @getphonenumber="handlePhoneNumberResp"
+      >
         微信登录/注册
       </button>
       <view class="policy-container">
         <label>
-          <checkbox style="transform: scale(0.7); margin-top: -2rpx" :value="1" /><text
-            style="color: #86909c"
-            >阅读并同意</text
-          >
-          <text class="policy-btn">《用户协议》</text> <text style="color: #86909c">和</text>
+          <checkbox
+            :checked="confirmedPolicy"
+            style="transform: scale(0.7); margin-top: -2rpx"
+          /><text style="color: #86909c">阅读并同意</text>
+          <text class="policy-btn" @click.stop="showUserPolicy">《用户协议》</text>
+          <text style="color: #86909c">和</text>
           <text class="policy-btn">《隐私协议》</text>
         </label>
       </view>
@@ -136,6 +158,7 @@ const handlePhoneNumberResp = (e) => {
     .policy-container {
       font-size: 28rpx;
       margin-top: 48rpx;
+
       .policy-btn {
         color: #2a59f2;
       }
