@@ -23,7 +23,7 @@
         "navigationStyle": "custom",
         "navigationBarTextStyle": "white"
       }
-    },
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
