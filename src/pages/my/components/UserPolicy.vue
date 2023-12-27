@@ -72,10 +72,12 @@
       }
       .confirm-btn {
         color:#fff;
+        font-size: 28rpx;
         background-color:#2F54EB;
       }
       .unconfirm-btn {
         color:#999;
+        font-size: 28rpx;
         background-color:transparent;
       }
     }

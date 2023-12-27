@@ -1,81 +1,53 @@
 <script setup lang="ts">
-  import { useMemberStore } from '@/stores'
-  import { homeService } from '@/services'
   import { ref } from 'vue'
   import UserPolicy from "./components/UserPolicy.vue"
 
-  const memberStore = useMemberStore()
+  const { safeAreaInsets } = uni.getSystemInfoSync()
+
+console.log({safeAreaInsets})
+
   const getPhoneBtnRef = ref()
   const confirmedPolicy = ref(false)
   const confirmPopup = ref()
   const policyPopup = ref()
 
-  const userInfo = ref<any[]>([])
-  const wxUserInfo = ref({})
+  // const userInfo = ref<any[]>([])
+  // const wxUserInfo = ref({})
 
-  const testRequest = async () => {
-    try {
-      const data = await homeService.getBanners()
-      userInfo.value = data.result
-    } catch (error) {
-      console.log({ error })
+  interface GtePhoneNumberRespDetail {
+    code ?: string;
+    encryptedData ?: string;
+    iv ?: string;
+    errMsg ?: string;
+  }
+
+  interface GetPhoneNumberResp {
+    detail : GtePhoneNumberRespDetail
+  }
+
+
+  const handlePhoneNumberResp = (e : GetPhoneNumberResp) => {
+    console.log('获取手机号', e)
+    const { code, encryptedData, iv, errMsg } = e.detail
+    if (!code) {
+      // 用户没有授权或者授权失败
+      uni.showToast({
+        title: "授权失败",
+        icon: "none"
+      })
+    } else {
+      uni.showToast({
+        title: "授权成功",
+      })
+      uni.navigateTo({
+        url: "/pages/index/index"
+      })
     }
   }
 
-  const callWxLogin = () => {
-    uni.showToast({
-      title: '测试',
-    })
-    // uni.getUserProfile({
-    //   desc: "请授权",success(info) {
-    //     console.log("info_result",info)
-    //   }
-    // })
-    // uni.getUserProfile({
-    //   provider: 'weixin',
-    //   desc: '获取用户信息',
-    //   success(info) {
-    //     console.log('用户信息', info)
-    //     wxUserInfo.value = info.userInfo
-    //     uni.login({
-    //       provider: 'weixin',
-    //       success(loginResult) {
-    //         console.log({ loginResult })
-    //         uni.showToast({
-    //           title: '成功',
-    //         })
-    //       },
-    //       fail() {
-    //         uni.showToast({
-    //           title: '失败',
-    //           icon: 'error',
-    //         })
-    //       },
-    //     })
-    //   },
-    //   fail(err) {
-    //     console.log('获取用户信息失败', err)
-    //   },
-    // })
-  }
-
-  const handlePhoneNumberResp = (e) => {
-    console.log('获取手机号', e)
-  }
-
   const showUserPolicy = () => {
-    console.log(11111,policyPopup.value)
     policyPopup.value.open()
   }
-
-  // const handleLogin = () => {
-  //   uni.login({
-  //     provider: 'weixin',
-  //     success(res) {
-  //       console.log('LOGIN_RESULT', res)
-  //     },
-  //   })
-  // }
 
   const hanldeUnConfirmedClick = () => {
     confirmPopup.value.open()
@@ -96,7 +68,7 @@
 </script>
 
 <template>
-  <view class="my-container">
+  <view class="my-container"  :style="{ paddingTop: safeAreaInsets!.top + 10 + 'px' }">
     <view class="logo-container">
       <image src="@/static/images/logo-with-text.svg" alt="" style="width: 372rpx; height: 424rpx" />
     </view>
@@ -113,7 +85,7 @@
             <text style="color: #86909c">阅读并同意</text>
             <text class="policy-btn" @click.stop="showUserPolicy">《用户协议》</text>
             <text style="color: #86909c">和</text>
-            <text class="policy-btn">《隐私协议》</text>
+            <text class="policy-btn" @click.stop="showUserPolicy">《隐私协议》</text>
           </checkbox-group>
         </label>
       </view>
@@ -126,7 +98,7 @@
             <text style="color: #86909c">请先同意</text>
             <text class="policy-btn" @click.stop="showUserPolicy">《用户协议》</text>
             <text style="color: #86909c">和</text>
-            <text class="policy-btn">《隐私协议》</text>
+            <text class="policy-btn" @click.stop="showUserPolicy">《隐私协议》</text>
           </view>
         </view>
         <view class="action-btns">
@@ -139,36 +111,19 @@
       </view>
     </uni-popup>
     <UserPolicy ref="policyPopup" />
-
-
-    <!-- view>会员信息：{{ memberStore.profile }}
-  </view>
-  <view>微信用户信息：{{ JSON.stringify(wxUserInfo)}}</view>
-  <button @tap="
-        memberStore.setProfile({
-          nickname: '崔比安尼',
-          token: '12345',
-        })
-      " size="mini" plain type="primary">
-    保存用户信息
-  </button>
-  <button @tap="memberStore.clearProfile()" size="mini" plain type="warn">清理用户信息</button>
-  <button @tap="testRequest" size="mini" plain type="primary">测试请求</button>
-  <button @tap="callWxLogin" size="mini" plain type="primary">测试微信登录</button>
-  <button open-type="getPhoneNumber" @getphonenumber="handlePhoneNumberResp">getPhoneNumber</button>
-  <p v-for="(item, index) of userInfo" :key="index">
-    <span>{{ index }}: </span>
-    <span>{{ item }}</span>
-  </p> -->
   </view>
 </template>
 
 <style lang="scss">
+  page {
+    background-color: #ededed;
+  }
+
   //
   .my-container {
     height: 100vh;
     padding-bottom: 64rpx;
-    background-color: #ededed;
+    // background-color: #ededed;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -185,10 +140,16 @@
     .login-container {
       margin-top: 10rpx;
       padding: 0 48rpx;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 64rpx;
 
       button {
         color: #fff;
         background-color: #2a59f2;
+        width: 100%;
       }
 
     }

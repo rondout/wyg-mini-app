@@ -13,6 +13,7 @@
     {
       "path": "pages/my/my",
       "style": {
+        "navigationStyle": "custom"
         // "navigationBarTitleText": "我的"
       }
     },
