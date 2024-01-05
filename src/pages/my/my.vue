@@ -4,9 +4,7 @@
 
   const { safeAreaInsets } = uni.getSystemInfoSync()
 
-console.log({safeAreaInsets})
-
-  const getPhoneBtnRef = ref()
+ss  const getPhoneBtnRef = ref()
   const confirmedPolicy = ref(false)
   const confirmPopup = ref()
   const policyPopup = ref()
