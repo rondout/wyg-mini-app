@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
+import { useAuthStore } from './stores'
+import '@/styles/common.scss'
+// import '@/static/iconfont/iconfont.css'
+
+const authStore = useAuthStore()
 
 onLaunch(() => {
   console.log('App Launch')
+  authStore.getCurrentUserInfo()
 })
 onShow(() => {
   console.log('App Show')
@@ -14,7 +20,7 @@ onHide(() => {
 
 <style lang="scss">
 // 字体图标
-@import '@/styles/fonts.scss';
+// @import '@/styles/fonts.scss';
 
 view,
 navigator,

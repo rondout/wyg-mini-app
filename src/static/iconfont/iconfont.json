@@ -1,0 +1,58 @@
+{
+  "id": "3355513",
+  "name": "tribiani-chat",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "122704",
+      "name": "more",
+      "font_class": "more",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "4933218",
+      "name": "好友",
+      "font_class": "haoyou",
+      "unicode": "e6f1",
+      "unicode_decimal": 59121
+    },
+    {
+      "icon_id": "28427020",
+      "name": "版本信息",
+      "font_class": "version",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "90846",
+      "name": "female",
+      "font_class": "female",
+      "unicode": "e71a",
+      "unicode_decimal": 59162
+    },
+    {
+      "icon_id": "90848",
+      "name": "male",
+      "font_class": "male",
+      "unicode": "e71c",
+      "unicode_decimal": 59164
+    },
+    {
+      "icon_id": "978426",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "5925256",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    }
+  ]
+}

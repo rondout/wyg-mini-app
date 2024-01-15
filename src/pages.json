@@ -11,9 +11,25 @@
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
+      "path": "pages/waiting/waiting",
+      "style": {
+        // "navigationBarTitleText": "首页",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页",
+        "navigationBarTitleText": "消息"
+        // "navigationStyle": "custom",
+        // "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
         "navigationStyle": "custom",
         "navigationBarTextStyle": "white"
       }
@@ -25,6 +41,18 @@
         "navigationStyle": "custom",
         "navigationBarTextStyle": "white"
       }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/friendRequest/friendRequest",
+      "style": { "navigationBarTitleText": "好友申请" }
     }
   ],
   "globalStyle": {
@@ -32,6 +60,28 @@
     "navigationBarTitleText": "",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
-  }
+  },
   // 设置 TabBar
+  "tabBar": {
+    "color": "#6d6464",
+    "selectedColor": "#3f51b5",
+    "backgroundColor": "#f7f7f7",
+    "borderStyle": "white",
+    "height": "120rpx",
+    "fontSize": "24rpx",
+    "list": [
+      {
+        "text": "消息",
+        "iconPath": "static/images/icon/msg-black.png",
+        "selectedIconPath": "static/images/icon/msg-color.png",
+        "pagePath": "pages/index/index"
+      },
+      {
+        "text": "我的",
+        "iconPath": "static/images/icon/mine-black.png",
+        "selectedIconPath": "static/images/icon/mine-color.png",
+        "pagePath": "pages/mine/mine"
+      }
+    ]
+  }
 }

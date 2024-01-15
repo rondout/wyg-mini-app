@@ -1,7 +1,7 @@
 export interface BaseResponse<T = any> {
   code: string
-  msg: string
-  result: T
+  success: boolean
+  data: T
 }
 
 export interface PageResponse<T = any> {

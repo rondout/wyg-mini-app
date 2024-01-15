@@ -13,16 +13,16 @@
  */
 
 /* 颜色变量 */
-
+@import '@/uni_modules/uni-scss/variables.scss';
 /* 行为相关颜色 */
-$uni-primary: #27ba9b;
-$uni-color-primary: #27ba9b;
+$uni-primary: #3f51b5;
+$uni-color-primary: #3f51b5;
 $uni-color-success: #4cd964;
 $uni-color-warning: #f0ad4e;
 $uni-color-error: #dd524d;
 
 /* 文字基本颜色 */
-$uni-text-color: #000; // 基本色
+$uni-text-color: #1a222f; // 基本色
 $uni-text-color-inverse: #fff; // 反色
 $uni-text-color-grey: #999; // 辅助灰色，如加载更多的提示信息
 $uni-text-color-placeholder: #808080;
@@ -42,7 +42,7 @@ $uni-border-color: #c8c7cc;
 /* 文字尺寸 */
 $uni-font-size-sm: 12px;
 $uni-font-size-base: 24rpx;
-$uni-font-size-lg: 16;
+$uni-font-size-lg: 16rpx;
 
 /* 图片尺寸 */
 $uni-img-size-sm: 20px;
