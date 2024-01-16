@@ -71,7 +71,7 @@ const handleLogin = async () => {
           <input placeholder="请输入账号" v-model="state.formData.username" />
         </view>
         <view class="input-container">
-          <input placeholder="请输入密码" v-model="state.formData.password" />
+          <input placeholder="请输入密码" type="safe-password" v-model="state.formData.password" />
         </view>
       </view>
 

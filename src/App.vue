@@ -54,4 +54,10 @@ image {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+uni-button[type='primary'] {
+  background-color: $uni-color-primary !important;
+}
+.uni-modal__btn_primary {
+  color: $uni-color-primary !important;
+}
 </style>

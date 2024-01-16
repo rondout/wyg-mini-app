@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
   const handleLogout = () => {
     state.currentUser = null
     uni.setStorageSync('token', null)
-    uni.navigateTo({ url: '/pages/login/login' })
+    uni.reLaunch({ url: '/pages/login/login' })
   }
 
   return { getCurrentUserInfo, isLogin, state, firstNameLetter, handleLogout }

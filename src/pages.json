@@ -27,6 +27,22 @@
       }
     },
     {
+      "path": "pages/contacts/contacts",
+      "style": {
+        "navigationBarTitleText": "通讯录"
+        // "navigationStyle": "custom",
+        // "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/contacts/detail/detail",
+      "style": {
+        "navigationBarTitleText": "聊天详情"
+        // "navigationStyle": "custom"
+        // "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/mine/mine",
       "style": {
         "navigationBarTitleText": "我的",
@@ -75,6 +91,12 @@
         "iconPath": "static/images/icon/msg-black.png",
         "selectedIconPath": "static/images/icon/msg-color.png",
         "pagePath": "pages/index/index"
+      },
+      {
+        "text": "通讯录",
+        "iconPath": "static/images/icon/contact-black.png",
+        "selectedIconPath": "static/images/icon/contact-color.png",
+        "pagePath": "pages/contacts/contacts"
       },
       {
         "text": "我的",

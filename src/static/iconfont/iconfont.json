@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "568990",
+      "name": "通讯录",
+      "font_class": "contacts",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
       "icon_id": "122704",
       "name": "more",
       "font_class": "more",
